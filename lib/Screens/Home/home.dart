@@ -1,10 +1,7 @@
-import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-
-import '../../Models/train_no_model.dart';
 import '../Auth service.dart';
-import 'package:http/http.dart'as http;
+
 
 class Home extends StatefulWidget {
   const Home({Key? key}) : super(key: key);
@@ -15,35 +12,14 @@ class Home extends StatefulWidget {
 
 
 class _HomeState extends State<Home> {
+  get paramter{
+    return _controller.text;
+  }
   final TextEditingController _controller = TextEditingController();
   String Model="";
-  Future<String?> train(String number) async {
 
 
-    var response = await http.post(
-        Uri.parse( 'https://androgamesinfotech.com/temp/test.php?train=<${_controller.text}>'),
-        headers:{
-          "Content-Type": "application/json",
 
-        },
-        body:jsonEncode({"data":_controller.text}));
-    var data =response.body.toString();
-    Model =response.body;
-    print (data);
-    print(response.statusCode);
-
-    if (response.statusCode == 201) {
-      String rest = response.body;
-      sendFromJson(rest);
-      print(rest);
-        return Model;
-
-    } else {
-
-      return null;
-    }
-
-  }
   buildLanguageDialog(BuildContext context)  {
     showDialog(
         context: context,
@@ -63,7 +39,7 @@ class _HomeState extends State<Home> {
     _controller.dispose();
     super.dispose();
   }
-  Future<Trainno>? futureAlbum;
+
   @override
   Widget build(BuildContext context) {
 
@@ -72,16 +48,18 @@ class _HomeState extends State<Home> {
         backgroundColor: Colors.blueGrey,
         appBar: AppBar(
         backgroundColor: Colors.amberAccent,
-        title: Text("Welcome to Train app",style: const TextStyle(color:Colors.black,fontWeight:FontWeight.bold )),
+        title: const Text("Welcome to Train app",style: TextStyle(color:Colors.black,fontWeight:FontWeight.bold )),
           actions: [
             FlatButton.icon(onPressed: () async {
               await _auth.SignOut();
-          }, icon:Icon(Icons.person), label: Text("logout") )
+              Navigator.of(context).pushNamedAndRemoveUntil(
+              '/SignIn', (Route<dynamic> route) => false);
+          }, icon:const Icon(Icons.person), label: const Text("logout") )
 
           ],
     ),
     body: Container(
-      margin: EdgeInsets.only(
+      margin: const EdgeInsets.only(
         top: 100.0,
       ),
     child: Column(
@@ -136,13 +114,16 @@ class _HomeState extends State<Home> {
             ),
             child: ElevatedButton(
               onPressed: () async{
-                futureAlbum =await train(_controller.text) as Future<Trainno>? ;
+               Model= _controller.text.toString()  ;
                 _controller.clear();
                 FocusScope.of(context).requestFocus(FocusNode());
-                buildLanguageDialog(context);
+
                 setState(() {
                   _controller.clear();
+                  Model;
                 });
+               Navigator.pushNamed(context,'/Traininfo',arguments:Model.toString(),);
+
               },
               child: Text('Submit',
                   style: Theme

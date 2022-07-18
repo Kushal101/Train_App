@@ -4,6 +4,9 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:train_app/Models/Usermodel.dart';
 import 'package:train_app/Screens/Auth%20service.dart';
+import 'package:train_app/Screens/Authenticate/SignIn.dart';
+import 'package:train_app/Screens/Home/Traininfo.dart';
+import 'package:train_app/Screens/Home/home.dart';
 import 'package:train_app/Screens/Wrapper.dart';
 
 void main() async {
@@ -28,6 +31,11 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.blue,
       ),
       home: Wrapper(),
+    routes: <String, WidgetBuilder>{
+      '/Traininfo': (context) =>  Traininfo(),
+      '/home':(context)=>Home(),
+      '/SignIn':(context)=>SignIn(),
+    }
     )
     );
   }
